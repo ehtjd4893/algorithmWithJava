@@ -1,0 +1,79 @@
+// 프로그래머스 카카오프렌즈 컬러링북 문제
+// 해당 코드는 1차로 보이는 테스트케이스는 통과했지만 제출시 0점짜리 코드
+
+class Solution {
+    public int[] solution(int m, int n, int[][] picture) {
+        int numberOfArea = 0;
+        int maxSizeOfOneArea = 0;
+
+        int [][] visited = new int[m][n];
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (picture[i][j] == 0) {
+                    visited[i][j] = 1;
+                }
+            }
+        }
+        // print(m,n, picture);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (visited[i][j] == 0) {
+                    int cur_num = picture[i][j];
+                    int width = 0;
+                    
+                    for(int p = 0; p + i < m; p++) {
+                        for (int k = 0; k + j < n; k++) {
+                            if (visited[p + i][k + j] == 0 && picture[i][k + j] == cur_num) {
+                                width++;
+                                visited[p + i][k + j] = 1;
+                                // System.out.println("width++ :" + width);
+                                
+                                // print(m,n, visited);
+                            } else {
+                                k = n;  // for break
+                                break;
+                            }
+                        }   // end of for - k
+                        for (int k = 1; j - k >= 0; k++) {
+                            if (visited[p + i][j - k] == 0 && picture[i][j - k] == cur_num) {
+                                width++;
+                                visited[p + i][j - k] = 1;
+                                // System.out.println("width++ :" + width);
+                                
+                                // print(m,n, visited);
+                            } else {
+                                k = n;
+                                break;
+                            }
+                        }
+                        
+                    }   // end of for - p
+                    numberOfArea++;
+                    maxSizeOfOneArea = maxSizeOfOneArea > width ? maxSizeOfOneArea : width;
+                    // System.out.println("numberOfArea: " + numberOfArea);
+                    // System.out.println("cur_width: " + width);
+                    // System.out.println("maxSizeOfOneArea: " + maxSizeOfOneArea);
+                }   // end of if             
+                
+            }   // end of for - j
+            
+        }   // end of for - i
+        
+        
+        int[] answer = new int[2];
+        answer[0] = numberOfArea;
+        answer[1] = maxSizeOfOneArea;
+        return answer;
+    }
+    
+    // public void print(int m, int n, int[][] visited) {
+    //     for (int i = 0; i < m; i++) {
+    //         for(int k = 0; k < n; k++) {
+    //             System.out.print(visited[i][k]);
+    //         }
+    //         System.out.print("\n");
+    //     }
+    //     System.out.println("---------------------------------------");
+    // }
+}
