@@ -1,0 +1,52 @@
+// 복잡한 부분은 재귀함수로 짜는게 오히려 나을 수 있다는 걸 꺠달았다.
+// 반복문을 주구장창 써대면, 나 스스로도 쉽게 알아차릴 수 없다.
+// 작은 단위의 작업으로 쪼개어 함수화하면 더 좋은 코드가 나올 수 있을거 같다.
+
+import java.lang.Math;
+
+class Solution {
+    public int[] solution(int m, int n, int[][] picture) {
+        int numberOfArea = 0;
+        int maxSizeOfOneArea = 0;
+
+        int [][] visited = new int[m][n];
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (picture[i][j] == 0) {
+                    visited[i][j] = 1;
+                }
+            }
+        }
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (visited[i][j] == 0) {
+                    numberOfArea++;
+                    int width = calcArea(i, j, picture[i][j], visited, picture);
+                    maxSizeOfOneArea = Math.max(maxSizeOfOneArea, width);
+                }
+            }
+        }
+        
+        int[] answer = new int[2];
+        answer[0] = numberOfArea;
+        answer[1] = maxSizeOfOneArea;
+        return answer;
+    }
+    
+    public int calcArea (int m, int n, int color, int[][] visited, int[][] picture) {
+        if (m < 0 || m >= visited.length || n < 0 || n >= visited[1].length) {
+            return 0;
+        } else if (visited[m][n] == 1) {
+            return 0;
+        } else if(color != picture[m][n]) {
+            return  0;
+        } else {
+            visited[m][n] = 1;
+            return 1 + calcArea(m - 1, n, color, visited, picture) + calcArea(m + 1, n, color, visited, picture)
+                + calcArea(m, n - 1, color, visited, picture) + calcArea(m, n + 1, color, visited, picture);
+        }
+        
+    }
+}
